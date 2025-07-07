@@ -9,19 +9,14 @@ spec:
       app: kafka-consumer
   template:
     metadata:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port: "8080"
       labels:
         app: kafka-consumer
     spec:
       containers:
         - name: kafka-consumer
-          image: kafka-consumer:1.0.1
+          image: kafka-consumer:1.0.5
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
             - containerPort: 5005
 
 

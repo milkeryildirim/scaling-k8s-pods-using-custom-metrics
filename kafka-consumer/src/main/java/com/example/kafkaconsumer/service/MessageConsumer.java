@@ -1,9 +1,9 @@
 package com.example.kafkaconsumer.service;
 
-import com.example.metrics.MonitoredKafkaListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
@@ -13,15 +13,19 @@ import org.springframework.stereotype.Service;
 public class MessageConsumer {
 
   private static final String TOPIC = "TestTopic";
-  @Value("${spring.kafka.consumer.group-id}")
-  private String groupId;
 
   /**
-   * Listens for messages using the custom @MonitoredKafkaListener. The method signature remains the
-   * same because our AOP Aspect requires these parameters to calculate and expose the lag metric
-   * automatically.
+   * Listens for messages on the "TestTopic".
+   * For each message, it calculates the current consumer lag for its partition and logs this information
+   * along with the message details. A small, artificial delay is added to simulate processing time.
+   *
+   * @param message    The content of the incoming message from Kafka.
+   * @param consumer   The underlying Kafka Consumer instance, injected by Spring to fetch partition metadata.
+   * @param topic      The topic from which the message was received, injected from Kafka message headers.
+   * @param partition  The partition number from which the message was received, injected from Kafka message headers.
+   * @param offset     The offset of the received message within its partition, injected from Kafka message headers.
    */
-  @MonitoredKafkaListener(topics = TOPIC, groupId = "${spring.kafka.consumer.group-id}")
+  @KafkaListener(topics = TOPIC, groupId = "${spring.kafka.consumer.group-id}")
   public void listen(
       String message,
       Consumer<?, ?> consumer,

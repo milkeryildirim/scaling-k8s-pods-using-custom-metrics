@@ -15,12 +15,3 @@ spring:
         org.apache.kafka.common.security.plain.PlainLoginModule required
         username="user1"
         password="password1";
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
-  metrics:
-    tags:
-      application: ${spring.application.name}

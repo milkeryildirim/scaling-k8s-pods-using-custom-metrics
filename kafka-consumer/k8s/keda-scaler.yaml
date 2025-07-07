@@ -18,7 +18,7 @@ spec:
         # The address of the Prometheus server, accessible from within the cluster
         serverAddress: http://prometheus-server.monitoring.svc.cluster.local
         # The PromQL query to get the total lag
-        query: 'sum(kafka_consumer_lag{groupId="message-processor-group"})'
+        query: 'sum(kafka_consumergroup_lag{consumergroup="message-processor-group"})'
         # The target value for the metric. KEDA will scale to maintain this ratio.
         threshold: '10' # Aim for an average of 10 lag per pod
         # What to do if the query returns no metric (e.g., zero lag)
