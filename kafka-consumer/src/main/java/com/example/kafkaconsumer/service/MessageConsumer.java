@@ -3,7 +3,6 @@ package com.example.kafkaconsumer.service;
 import com.example.metrics.MonitoredKafkaListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 public class MessageConsumer {
 
   private static final String TOPIC = "TestTopic";
-  @Value("${spring.kafka.consumer.group-id}")
-  private String groupId;
 
   /**
    * Listens for messages using the custom @MonitoredKafkaListener. The method signature remains the

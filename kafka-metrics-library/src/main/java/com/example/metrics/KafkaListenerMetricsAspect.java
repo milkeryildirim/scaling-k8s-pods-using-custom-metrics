@@ -26,7 +26,7 @@ import org.springframework.messaging.handler.annotation.Header;
 @RequiredArgsConstructor
 public class KafkaListenerMetricsAspect {
 
-  private static final String METRIC_NAME = "kafka.consumer.lag";
+  private static final String METRIC_NAME = "kafka.consumergroup.lag";
   private static final String METRIC_DESCRIPTION =
       "The current estimated lag of a Kafka consumer group";
 
@@ -69,7 +69,7 @@ public class KafkaListenerMetricsAspect {
               LagInfo newInfo = new LagInfo();
               Tags tags =
                   Tags.of(
-                      "groupId", groupId, "topic", topic, "partition", String.valueOf(partition));
+                      "consumergroup", groupId, "topic", topic, "partition", String.valueOf(partition));
               Gauge.builder(METRIC_NAME, newInfo, LagInfo::getLag)
                   .description(METRIC_DESCRIPTION)
                   .tags(tags)
