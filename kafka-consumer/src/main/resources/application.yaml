@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: kafka-consumer
+  kafka:
+    bootstrap-servers: kafka.kafka.svc.cluster.local:9092
+    consumer:
+      group-id: message-processor-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    properties:
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: PLAIN
+      sasl.jaas.config: |
+        org.apache.kafka.common.security.plain.PlainLoginModule required
+        username="user1"
+        password="password1";
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

@@ -1,0 +1,25 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-consumer-scaler
+  # The ScaledObject must be in the same namespace as the target deployment
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: kafka-consumer-deployment
+  # Scaling boundaries
+  minReplicaCount: 1
+  maxReplicaCount: 3 # Same as our number of partitions
+  # How often KEDA should check the metric (in seconds)
+  pollingInterval: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        # The address of the Prometheus server, accessible from within the cluster
+        serverAddress: http://prometheus-server.monitoring.svc.cluster.local
+        # The PromQL query to get the total lag
+        query: 'sum(kafka_consumer_lag{groupId="message-processor-group"})'
+        # The target value for the metric. KEDA will scale to maintain this ratio.
+        threshold: '10' # Aim for an average of 10 lag per pod
+        # What to do if the query returns no metric (e.g., zero lag)
+        queryForMissing: '0'

@@ -1,0 +1,19 @@
+kafkaServer:
+  - kafka.kafka.svc.cluster.local:9092
+
+# Annotations to attach to pod
+annotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9308"
+
+sasl:
+  enabled: true
+  handshake: true
+  scram:
+    enabled: true
+    mechanism: plain
+    username: user1
+    password: password1
+
+
